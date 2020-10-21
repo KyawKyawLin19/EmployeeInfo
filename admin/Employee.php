@@ -50,13 +50,13 @@ class Employee
     public function add_employee($data){
 
         $statement = $this->getPDO()->prepare("
-        INSERT INTO `employee` (`name`, `email`, `dob`, `company_id`, `department_id`) 
-        VALUES (:name, :email, :dob, :company_id, :department_id);
+        INSERT INTO `employee` (`name`, `email`, `age`, `company_id`, `department_id`) 
+        VALUES (:name, :email, :age, :company_id, :department_id);
         ");
 
         $statement->bindParam(":name", $data["name"]);
         $statement->bindParam(":email", $data["email"]);
-        $statement->bindParam(":dob", $data["dob"]);
+        $statement->bindParam(":age", $data["age"]);
         $statement->bindParam(":company_id", $data["company"]);
         $statement->bindParam(":department_id", $data["department"]);
 
@@ -72,14 +72,14 @@ class Employee
 
         $statement = $this->getPDO()->prepare("
         UPDATE `employee`
-            SET name = :name, email = :email, dob = :dob, company_id = :company_id, department_id = :department_id
+            SET name = :name, email = :email, age = :age, company_id = :company_id, department_id = :department_id
             WHERE id = :id
             ");
 
         $statement->bindParam(":id", $data["id"]);
         $statement->bindParam(":name", $data["name"]);
         $statement->bindParam(":email", $data["email"]);
-        $statement->bindParam(":dob", $data["dob"]);
+        $statement->bindParam(":age", $data["age"]);
         $statement->bindParam(":company_id", $data["company"]);
         $statement->bindParam(":department_id", $data["department"]);
 
@@ -105,12 +105,13 @@ class Employee
 
     }
 
-    public function pagination_employee($offset,$numOfrecs){
-        $stmt = $this->getPDO()->prepare("SELECT * FROM employee ORDER BY id DESC LIMIT $offset,$numOfrecs");
+    public function pagination_employee($order,$sort,$offset,$numOfrecs){
+        $stmt = $this->getPDO()->prepare("SELECT * FROM employee ORDER BY `$order` $sort LIMIT $offset,$numOfrecs");
 
         $stmt->execute();
         
         $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+
         return $result;
     }
 
@@ -136,6 +137,14 @@ class Employee
         $employee = $stmt->fetch();
 
         return $employee[0];
+    }
+
+    public function check_email($email){
+        $statement = $this->getPDO()->prepare("SELECT * FROM `employee` WHERE email=:email");
+        $statement->bindParam(':email',$email);
+        $statement->execute();
+        $result = $statement->fetch();
+        return $result;
     }
 
 }

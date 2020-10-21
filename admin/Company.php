@@ -23,7 +23,7 @@ class Company
 
     public function getall_company(){
 
-        $stmt = $this->getPDO()->prepare("SELECT * FROM company");
+        $stmt = $this->getPDO()->prepare("SELECT * FROM company ORDER BY id DESC");
 
         $stmt->execute();
 
@@ -44,6 +44,18 @@ class Company
 
         return $company_name;
     }
+
+    public function pagination_company($order="name",$sort="ASC",$offset,$numOfrecs){
+        
+        $stmt = $this->getPDO()->prepare("SELECT * FROM company ORDER BY `$order` $sort LIMIT $offset,$numOfrecs");
+
+        $stmt->execute();
+        
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        
+        return $result;
+    }
+
 
 }
 

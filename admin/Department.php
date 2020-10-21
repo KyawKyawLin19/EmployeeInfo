@@ -44,6 +44,16 @@ class Department
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
+    public function pagination_department($order,$sort,$offset,$numOfrecs){
+        $stmt = $this->getPDO()->prepare("SELECT * FROM department ORDER BY `$order` $sort LIMIT $offset,$numOfrecs");
+
+        $stmt->execute();
+        
+        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+        return $result;
+    }
+
 }
 
 ?>

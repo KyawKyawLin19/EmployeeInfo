@@ -1,5 +1,6 @@
 <?php
     require_once('header.php');
+    require_once('Config/common.php');
     require_once('Company.php');
     require_once('Department.php');
     require_once('Employee.php');
@@ -12,8 +13,8 @@
 
     
     if(!empty($_POST)){
-        if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['dob']) 
-        || empty($_POST['company']) || empty($_POST['department'])) {
+        if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['age']) 
+        || empty($_POST['company']) || empty($_POST['department']) || is_numeric($_POST['age']) != 1) {
             
             if(empty($_POST['name'])) {
 
@@ -27,9 +28,9 @@
 
             }
 
-            if(empty($_POST['dob'])) {
+            if(empty($_POST['age'])) {
 
-                $dobError = '* Date of Birth cannot be null';
+                $ageError = '* Age cannot be null';
 
             } 
 
@@ -43,6 +44,12 @@
 
                 $departmentError = '* Department cannot be null';
 
+            }
+
+            if (is_numeric($_POST['age']) != 1) {
+
+                $ageError = 'Age should be integer value';
+      
             }
         
         } 
@@ -83,7 +90,7 @@
                 <h4>Edit Employee Info</h4>
                     <form action="" method="post">
                         
-                        <!-- <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>"> -->
+                        <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
                         
                         <input type="hidden" name="id" value="<?php echo $emp->id ?>">
 
@@ -98,8 +105,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="">Date Of Birth</label><p style="color:red"><?php echo empty($dobError)? '' : $dobError; ?></p>
-                            <input type="date" name="dob" class="form-control" value="<?php echo date('Y-m-d',strtotime($emp->dob));?>">
+                            <label for="">Age</label><p style="color:red"><?php echo empty($ageError)? '' : $ageError; ?></p>
+                            <input type="text" name="age" class="form-control" value="<?php echo $emp->age;?>">
                         </div>
                         
                         <div class="form-group">

@@ -10,9 +10,12 @@
     $department = new Department();
     $department_list=$department->getall_department();
 
+    $employee = new Employee();
+
     if(!empty($_POST)){
-        if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['dob']) 
-        || empty($_POST['company']) || empty($_POST['department'])) {
+        if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['age']) 
+        || empty($_POST['company']) || empty($_POST['department']) || is_numeric($_POST['age']) != 1
+        || $employee->check_email($_POST['email'])) {
             
             if(empty($_POST['name'])) {
 
@@ -26,9 +29,9 @@
 
             }
 
-            if(empty($_POST['dob'])) {
+            if(empty($_POST['age'])) {
 
-                $dobError = '* Date of Birth cannot be null';
+                $ageError = '* Age cannot be null';
 
             } 
 
@@ -43,11 +46,20 @@
                 $departmentError = '* Department cannot be null';
 
             }
+
+            if (is_numeric($_POST['age']) != 1) {
+
+                $ageError = 'Age should be integer value';
+      
+            }
+
+            if($employee->check_email($_POST['email'])){
+                $emailError = 'This Email already taken';
+            }
         
         } 
         else {
-            $employee = new Employee();
-
+            
             $result = $employee->add_employee($_POST);
 
             if($result){
@@ -76,9 +88,9 @@
             <div class="card">
                 <div class="card-body">
                 <h4>Create New Employee</h4>
-                    <form action="employee_create.php" method="post">
+                    <form action="employee_create.php" method="POST">
                         
-                        <!-- <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>"> -->
+                        <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
                         
                         <div class="form-group">
                             <label for="">Name</label><p style="color:red"><?php echo empty($nameError)? '' : $nameError; ?></p>
@@ -91,8 +103,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="">Date Of Birth</label><p style="color:red"><?php echo empty($dobError)? '' : $dobError; ?></p>
-                            <input type="date" name="dob" class="form-control">
+                            <label for="">Age</label><p style="color:red"><?php echo empty($ageError)? '' : $ageError; ?></p>
+                            <input type="text" name="age" class="form-control">
                         </div>
                         
                         <div class="form-group">
@@ -116,7 +128,7 @@
 
                         <div class="from-group">
                           <input type="submit" class="btn btn-success" value="Submit">
-                          <a href="product_list.php" class="btn btn-warning">Back</a>
+                          <a href="employee_list.php" class="btn btn-warning">Back</a>
                         </div>
                 
                     </form>

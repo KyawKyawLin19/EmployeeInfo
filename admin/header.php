@@ -1,9 +1,12 @@
+<?php 
+session_start();
+?>
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
-<html lang="en">
+<html lang="en">  
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,8 +20,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
 
   <script src="plugins/jquery/jquery.min.js"></script>
   <!-- Bootstrap 4 -->
@@ -53,7 +54,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <!-- <a href="#" class="d-block"> <?php echo $_SESSION['username']; ?> </a> -->
+          <a href="#" class="d-block"> <?php echo $_SESSION['username']; ?> </a>
         </div>
       </div>
 
