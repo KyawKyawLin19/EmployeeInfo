@@ -1,6 +1,5 @@
 <?php
-
-    require_once('header.php');
+    session_start();
     require_once('Config/common.php');
     require_once('Company.php');
     require_once('Department.php');
@@ -37,8 +36,8 @@
     }
 
     $company = new Company();
-
     $rawResult = $company->getall_company();
+    require_once('header.php');
 
 ?>
 <div class="content-wrapper" style="margin-top:50px;">
@@ -111,7 +110,7 @@
 
                       }
 
-                      $numOfrecs = 3;
+                      $numOfrecs = 5;
 
                       $offset = ($pageno - 1) * $numOfrecs; 
 
@@ -225,5 +224,5 @@
     </section>
     </div>
 <?php
-    require_once('footer.html');
+    require_once('footer.php');
 ?>

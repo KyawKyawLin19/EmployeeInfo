@@ -1,42 +1,41 @@
 <?php
-
-    require_once('header.php');
+    session_start();
     require_once('Config/common.php');
     require_once('Company.php');
     require_once('Department.php');
     require_once('Employee.php');
 
-    $company = new Company();
-    $companies = $company->getall_company();
-
-    $department = new Department();
-    $departments = $department->getall_department();
-
-    $employee = new Employee();
-
-    if(empty($_GET['pageno'])) {
-
-      unset($_COOKIE['sort']);
-      unset($_COOKIE['order']);
-
-      setcookie('sort', null, -1, '/');
-      setcookie('order', null, -1, '/');
-
+    if(empty($_SESSION['user_id'] && $_SESSION['logged_in'])){
+      header('Location: login.php');
     }
 
-    if(isset($_GET['order'])){
+    $company = new Company();
+    $companies = $company->getall_company();
+    $department = new Department();
+    $departments = $department->getall_department();
+    $employee = new Employee();
+
+    if (empty($_GET['pageno'])) {
+      unset($_COOKIE['sort']);
+      unset($_COOKIE['order']);
+      setcookie('sort', null, -1, '/');
+      setcookie('order', null, -1, '/');
+    }
+
+    if (isset($_GET['order'])){
       $order = $_GET['order'];
       setcookie('order', $_GET['order'], time() + (86400 * 30 ), "/");
-    }else{
+    } else {
       $order = 'name';
     }
 
-    if(isset($_GET['sort'])){
+    if (isset($_GET['sort'])) {
       $sort = $_GET['sort'];
       setcookie('sort', $_GET['sort'], time() + (86400 * 30 ), "/");
-    }else{
+    } else {
       $sort = 'ASC';
     }
+    require_once('header.php');
 
 ?>
 
@@ -44,59 +43,42 @@
 <div class="content-wrapper">
     <div class="content-header">
       <div class="container-fluid">
-       
       </div>
     </div>
     <div class="content">
       <div class="container-fluid">
         <div class="row">
-          
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Employee Listings</h3>
               </div>
               <?php 
-
-                if(!empty($_GET['pageno'])){
-
+                if (!empty($_GET['pageno'])){
                     $pageno = $_GET['pageno'];
-
-                }else {
-
+                } else {
                     $pageno = 1;
-
                 }
 
                 $numOfrecs = 10;
-
                 $offset = ($pageno - 1) * $numOfrecs; 
 
-
-                if(empty($_COOKIE['order']) && empty($_COOKIE['sort'])){
-
+                if (empty($_COOKIE['order']) && empty($_COOKIE['sort'])){
                     $rawResult = $employee->getall_employee();
-
                     $total_pages = ceil(count($rawResult) / $numOfrecs);
-
                     $employees = $employee->pagination_employee($order,$sort,$offset,$numOfrecs);
                 }else {
-
                     $order = $_COOKIE['order'];
                     $sort = $_COOKIE['sort'];
                     $rawResult = $employee->getall_employee();
-
                     $total_pages = ceil(count($rawResult) / $numOfrecs);
-
                     $employees = $employee->pagination_employee($order,$sort,$offset,$numOfrecs);
                 }
-
-                ?>
-                <?php
-                    $sort == 'ASC'? $sort = 'DESC' :$sort = 'ASC';
-                    
-                    if($employees){
-                ?>
+              ?>
+              <?php
+                  $sort == 'ASC'? $sort = 'DESC' :$sort = 'ASC';
+                  if($employees){
+              ?>
               <div class="card-body">
                 <div>
                   <a href="employee_create.php" class="btn btn-primary" type="button">New Employee</a>
@@ -111,25 +93,19 @@
                       <th>Age <a href="employee_list.php?order=age&sort=<?php echo $sort ?>"><i class="fas fa-sort"></i></a></th>
                       <th>Company</th>
                       <th>Department</th>
-                      <th style="width: 30px">Action</th>
+                      <th style="width: 20px">Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php
-                      if($employees){
-                        
-                        if($pageno == 1){
-
+                      if ($employees) {
+                        if ($pageno == 1) {
                             $id = 1;
-
-                        }else {
-
+                        } else {
                             $id = ($pageno - 1) * $numOfrecs + 1;
-
                         }
-                        foreach($employees as $e){
+                        foreach ($employees as $e) {
                     ?>
-
                     <tr>
                       <td><?php echo escape($id); ?></td>
                       <td><?php echo escape($e->name); ?></td>
@@ -150,13 +126,10 @@
                         </div>
                       </td>
                     </tr>
-
-
                     <?php
                         $id++;
                         }
                       }
-
                     ?>
                   </tbody>
                 </table>
@@ -183,16 +156,14 @@
                     }
                 ?>
               </div>
-
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </div>
 
   <?php
-    require_once('footer.html');
+    require_once('footer.php');
   ?>
   

@@ -1,3 +1,9 @@
+<?php
+    if(empty($_SESSION['user_id'] && $_SESSION['logged_in'])){
+        header('Location: login.php');
+    }
+?>
+
 <aside class="control-sidebar control-sidebar-dark">
     <div class="p-3">
         <h5>Title</h5>
